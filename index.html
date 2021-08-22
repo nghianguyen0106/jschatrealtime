@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>app realtime chat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<style>
+    ul {
+        list-style: none;
+    }
+    
+    .up {
+        background-color: green;
+        color: white;
+    }
+    
+    .down {
+        background-color: red;
+        color: white;
+    }
+</style>
+
+<body>
+    <h1>App chat realtime . .. . .. </h1>
+    <ul id="message"></ul>
+    <form action="" id="chatform">
+        <input type="text" id="chatmes">
+        <button id="sendchat">Gui</button>
+    </form>
+    <span id="bitcoin"></span>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    const chatform = document.querySelector('#chatform');
+    const chatmes = document.querySelector('#chatmes');
+    const name = prompt('Tên bạn là gì ?')
+
+
+    chatmes.focus();
+    chatform.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const message = chatmes.value
+        socket.emit('on-chat', {
+            name,
+            message
+        });
+        chatmes.value = "";
+
+    })
+    const messages = document.querySelector('#message');
+    socket.on('user-chat', (message) => {
+        const chatitem = document.createElement("li");
+        chatitem.textContent = `${message.name}: ${message.message}`;
+        messages.appendChild(chatitem);
+    })
+    let giacu = 0;
+    const pricespan = document.querySelector('#bitcoin');
+    socket.on('bitcoin-price', (data) => {
+        pricespan.textContent = `${data.price} USD`;
+        const price = data.price
+        if (price > giacu) {
+            pricespan.className = 'up'
+        } else {
+            pricespan.className = 'down'
+        }
+        giacu = price
+    })
+</script>
+</script>
+
+</html>
