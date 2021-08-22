@@ -1,9 +1,11 @@
 {
-    "name": "js chat",
+    "name": "jschat",
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon index.js"
+        "start": "nodemon index.js",
+        "predeploy": "npm run index.js",
+        "deploy": "gh-pages -d index.js"
     },
     "license": "MIT",
     "dependencies": {
